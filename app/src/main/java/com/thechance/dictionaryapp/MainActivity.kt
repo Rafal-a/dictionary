@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
 
             lifecycleScope.launch(Dispatchers.Main){
-                flow1.collect {
+                flow1.buffer().collect {
                     Log.i("HEHEH", it)
                     binding.textView.text = it
 

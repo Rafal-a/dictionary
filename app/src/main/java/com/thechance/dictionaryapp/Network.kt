@@ -14,10 +14,10 @@ object Network {
     val gson = Gson()
     private val builder = FormBody.Builder()
     var result = ""
-    var words:String=""
+    var words:String?=""
 
 
-    fun sendData(word: String , source:String , target:String):String{
+    fun sendData(word: String , source:String , target:String):String?{
 
         var response:String=""
         val url = UrlModifier.getUrlInfo(word , source , target)
@@ -41,22 +41,7 @@ object Network {
             })
         return words
         }
-   /* fun getData(body: String): Flow<State<Response>> {
 
-        val request = Request.Builder().url(body).build()
-        val response = Network.client.newCall(request).execute()
-        if (response.isSuccessful) {
-            val responseQuiz = Network.gson.fromJson(response.body.toString(), Response::class.java)
-            println(responseQuiz.toString())
-            State.Success(responseQuiz)
-        } else {
-            State.Error(response.message)
-        }
-        return flow {
-            response.body
-        }
-
-    }*/
     object TAG {
         const val LOG_TAG = "REQUEST"
     }
