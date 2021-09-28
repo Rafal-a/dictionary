@@ -14,40 +14,41 @@ object Network {
     val gson = Gson()
     private val builder = FormBody.Builder()
     var result = ""
-    var words:String?=""
+    var words: String? = ""
 
 
-    fun sendData(word: String , source:String , target:String):String?{
+    fun sendData(word: String, source: String, target: String): State<Response> {
 
-        var response:String=""
-        val url = UrlModifier.getUrlInfo(word , source , target)
+        val url = UrlModifier.getUrlInfo(word, source, target)
         val request = Request.Builder()
             .url(url)
             .post(builder.build())
             .build()
 
-            client.newCall(request).enqueue(object :Callback{
-                override fun onFailure(call: Call, e: IOException) {
-                    println("----- ERROR ----- = ${e.message}")
-                }
+        val response = client.newCall(request).execute()
 
-                override fun onResponse(call: Call, response: okhttp3.Response) {
-                    val result  = gson.fromJson(response.body?.string().toString(), Response::class.java)
-                    words = result.translatedWord
+        return if (response.isSuccessful) {
+            val responseData = Gson()
+                .fromJson(
+                response.body?.string(), Response::class.java
+            )
 
 
-                }
+            State.Success(responseData)
 
-            })
-        return words
+        } else {
+
+            State.Error(response.message)
         }
+
+    }
 
     object TAG {
         const val LOG_TAG = "REQUEST"
     }
 
 
-    }
+}
 
 
 
